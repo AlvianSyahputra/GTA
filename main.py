@@ -123,7 +123,10 @@ def ols(xs: list[float], ys: list[float]) -> tuple[float, float]:
 
 def comparable_day_hours(comp: dict) -> dict[int, float]:
     """A comparable's release-day hourly viewers, {hour 1..24: viewers}."""
-    day0 = parse_iso(comp["day_start"])
+    try:
+        day0 = parse_iso(comp["day_start"])
+    except (KeyError, ValueError):
+        return {}  # a comparable with no usable release day contributes nothing
     hours: dict[int, float] = {}
     for pt in comp.get("hourly") or []:
         try:
